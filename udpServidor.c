@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         printf("%s", branco);
         printf("\nRecebida de: %s   Porta: %d\n",inet_ntoa(from.sin_addr), ntohs(from.sin_port));
 
-        char str []="sair";
+        char str [] = "sair";
         while (strncmp(str, entrada, 4) == 0)
         {
             close(sock);
