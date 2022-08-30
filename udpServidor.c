@@ -15,7 +15,6 @@
 
 int main(int argc, char *argv[]) 
 { 
-
     int sock, length, fromlen, n; 
     struct sockaddr_in server;//endereco do servidor 
     struct sockaddr_in from;//endereco do destino 
@@ -23,68 +22,73 @@ int main(int argc, char *argv[])
     char saida[256] = "MSG recebida no servidor"; 
 
     if (argc < 2) { 
-        fprintf(stderr, "\nERRO: porta não informada! \nDigite: ./udpserver <porta>\n\n"); 
+        fprintf(stderr, "\nERRO: porta nï¿½o informada! \nDigite: ./udpserver <porta>\n\n"); 
         exit(0); 
-   		 } 
+	} 
 
-
-//cria o socket
-
-    sock=socket(PF_INET, SOCK_DGRAM, 0); 
-    if (sock < 0){ 
+    // cria o socket
+    sock = socket(PF_INET, SOCK_DGRAM, 0); 
+    
+    if (sock < 0)
+    { 
         printf("Erro em socket()"); 
-        exit(0);}
+        exit(0);
+    }
 
-//define as estruturas de end para socket   
+    // define as estruturas de end para socket   
     length = sizeof(server); // tamanho do end
-    bzero(&server,length); 
-//elimina espacos nulos da struct de end
-    server.sin_family=AF_INET;// define a familia de protocolos 
-    server.sin_addr.s_addr=INADDR_ANY; 
-//associa ao end local
-    server.sin_port=htons(atoi(argv[1])); 
-//porta forneciada pelo usuario
+    bzero(&server, length);
 
-//associa end ao socket
+    // elimina espacos nulos da struct de end
+    server.sin_family = AF_INET; // define a familia de protocolos 
+    server.sin_addr.s_addr = INADDR_ANY; // associa ao end local
+    server.sin_port = htons(atoi(argv[1])); // porta forneciada pelo usuario
 
-    if (bind(sock,(struct sockaddr *)&server,length)<0) 
-        { printf("Erro em bind ()");
-          close (sock);
-          exit(0);}
-   
-   fromlen = sizeof(struct sockaddr_in);
+    // associa end ao socket
+    if (bind(sock, (struct sockaddr *)&server, length) < 0)
+    { 
+        printf("Erro em bind ()");
+        close (sock);
+        exit(0);
+    }
 
-   printf("\n%sServidor iniciado, aguardando msgs dos clientes...\n",negrito); 
+    fromlen = sizeof(struct sockaddr_in);
 
-//faz leitura
-    while (1) {
-        bzero(entrada,256); 
-        n = recvfrom(sock,entrada,256,0,(struct sockaddr *)&from,&fromlen); 
-        if (n < 0) 
-            {printf(" Erro em recvfrom()"); 
-             close(sock);
-             exit(0);}
+    printf("\n%sServidor iniciado, aguardando msgs dos clientes...\n",negrito); 
 
-       printf("\nMensagem: %s", amarelo);
-       printf("%s", entrada);
-       printf("%s", branco);
-       printf("\nRecebida de: %s   Porta: %d\n",inet_ntoa(from.sin_addr), ntohs(from.sin_port));
- 	
+    // faz leitura
+    while (1)
+    {
+        bzero(entrada, 256); 
+        n = recvfrom(sock, entrada, 256, 0, (struct sockaddr *)&from, &fromlen); 
+        if (n < 0)
+        {
+            printf(" Erro em recvfrom()"); 
+            close(sock);
+            exit(0);
+        }
+
+        printf("\nMensagem: %s", amarelo);
+        printf("%s", entrada);
+        printf("%s", branco);
+        printf("\nRecebida de: %s   Porta: %d\n",inet_ntoa(from.sin_addr), ntohs(from.sin_port));
+
         char str []="sair";
-        while (strncmp(str,entrada,4) == 0)
-           {close(sock);
-            exit(0);}       
+        while (strncmp(str, entrada, 4) == 0)
+        {
+            close(sock);
+            exit(0);
+        }
 
-           	 
-
-  //envia resposa
+        // envia resposa
         n = sendto(sock,saida,256,0,(struct sockaddr *)&from,fromlen);
-        if (n < 0){ 
-                  printf("sendto");
-                  close (sock);
-                  exit(0);}
+        if (n < 0)
+        { 
+            printf("sendto");
+            close (sock);
+            exit(0);
+        }
 
         printf("\n%sAguardando msgs dos clientes...\n", negrito);
     } 
-
 }

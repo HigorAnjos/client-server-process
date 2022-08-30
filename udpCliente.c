@@ -23,27 +23,27 @@ int main(int argc, char *argv[])
         exit(1); 
     } 
 
-    sock= socket(AF_INET, SOCK_DGRAM, 0); 
+    sock = socket(AF_INET, SOCK_DGRAM, 0); 
     if (sock < 0) 
         error("socket"); 
-  
+
     server.sin_family = AF_INET; 
     hp = gethostbyname(argv[1]); 
-    if (hp==0) error("host desconhecido"); 
-    bcopy((char *)hp->h_addr,(char *)&server.sin_addr,hp->h_length); 
+    if (hp == 0) error("host desconhecido"); 
+    bcopy((char *)hp->h_addr, (char *)&server.sin_addr, hp->h_length); 
     server.sin_port = htons(atoi(argv[2])); 
-    length=sizeof(struct sockaddr_in); 
+    length = sizeof(struct sockaddr_in);
 
     printf("Digite a menssagem: "); 
-    bzero(saida,1024); 
-    fgets(saida,1024,stdin); 
+    bzero(saida, 1024);
+    fgets(saida, 1024, stdin);
 
-    n=sendto(sock,saida,strlen(saida),0,(struct sockaddr *)&server,length); 
+    n = sendto(sock, saida, strlen(saida), 0, (struct sockaddr *)&server, length); 
     if (n < 0) error("Sendto");
-   
-    bzero(entrada,1024); 
 
-    n = recvfrom(sock,entrada,1024,0,(struct sockaddr *)&from, &length); 
+    bzero(entrada, 1024);
+
+    n = recvfrom(sock, entrada, 1024, 0, (struct sockaddr *)&from, &length); 
     if (n < 0) error("recvfrom"); 
 
     //write(1,"ACK:  ",12); 
@@ -56,4 +56,3 @@ void error(char *msg)
     perror(msg); 
     exit(0); 
 } 
-
