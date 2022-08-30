@@ -1,21 +1,16 @@
 # client-server-process
 
-## Compilar os arquivos
+## Compilar e executar
 
 ```Bash
 gcc udpServidor.c -o servidor
 
-gcc udpCliente.c -o cliente
-
+./servidor 5555
 ```
 
-
-## executar
-
 ```Bash
-./servidor
+gcc udpCliente.c -o cliente
 
-./cliente
-
+./cliente 127.0.0.1 5555
 ```
 
