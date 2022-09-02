@@ -11,10 +11,7 @@
 #define amarelo "\x1B[33m"
 #define branco  "\x1B[37m"
 
-
-
-int main(int argc, char *argv[]) 
-{ 
+void readClient (int argc, char *argv[]) {
     int sock, length, fromlen, n; 
     struct sockaddr_in server;//endereco do servidor 
     struct sockaddr_in from;//endereco do destino 
@@ -91,4 +88,9 @@ int main(int argc, char *argv[])
 
         printf("\n%sAguardando msgs dos clientes...\n", negrito);
     } 
+}
+
+int main(int argc, char *argv[]) 
+{ 
+    readClient(argc, argv);
 }
